@@ -1,13 +1,39 @@
 let lastConfig = "";
 
+function updateStatus(type, message) {
+  const indicator = document.getElementById("statusIndicator");
+  const statusClass = type === 'success' ? 'status-success' : 'status-error';
+
+  indicator.innerHTML = `
+    <div class="status-message ${statusClass}">
+      <div class="status-dot"></div>
+      ${message}
+    </div>
+  `;
+
+  setTimeout(() => {
+    indicator.innerHTML = '';
+  }, 5000);
+}
+
 function convert() {
   const url = document.getElementById("vlessInput").value.trim();
   const output = document.getElementById("output");
   const downloadBtn = document.getElementById("downloadBtn");
 
-  if (!url.startsWith("vless://")) {
-    output.textContent = "Ошибка: введите ссылку vless://";
+  if (!url) {
+    output.className = "output-placeholder";
+    output.textContent = "# Enter VLESS link to start conversion\n# Your Clash.Meta configuration will appear here\n# \n# ┌─ Ready to convert ─┐\n# │                    │\n# │  Paste VLESS URL   │\n# │  in the sidebar    │\n# │                    │\n# └────────────────────┘";
     downloadBtn.disabled = true;
+    updateStatus('error', 'Please enter VLESS link');
+    return;
+  }
+
+  if (!url.startsWith("vless://")) {
+    output.className = "output-placeholder";
+    output.textContent = "# Error: Please enter a valid vless:// link\n# \n# ┌─ Invalid format ─┐\n# │                  │\n# │   Check your     │\n# │   VLESS URL      │\n# │                  │\n# └──────────────────┘";
+    downloadBtn.disabled = true;
+    updateStatus('error', 'Incorrect link format');
     return;
   }
 
@@ -100,20 +126,24 @@ proxies:
     packet-encoding: xudp
 
 proxy-groups:
-  - name: → Remnawave
+  - name: → VLESS
     type: select
     proxies:
       - ${name}
 
 rules:
-  - MATCH,→ Remnawave
+  - MATCH,→ VLESS
 `;
 
+    output.className = "output-result";
     output.textContent = lastConfig;
     downloadBtn.disabled = false;
+    updateStatus('success', 'Configuration successfully created!');
   } catch (e) {
-    output.textContent = "Ошибка: не удалось разобрать ссылку";
+    output.className = "output-placeholder";
+    output.textContent = "# Error: Failed to parse VLESS link\n# Check the format is correct\n# \n# ┌─ Parse error ─┐\n# │               │\n# │   Check URL   │\n# │   format      │\n# │               │\n# └───────────────┘";
     downloadBtn.disabled = true;
+    updateStatus('error', 'Failed to process link');
   }
 }
 
@@ -125,4 +155,20 @@ function downloadConfig() {
   link.href = URL.createObjectURL(blob);
   link.download = "clash-config.yaml";
   link.click();
+
+  updateStatus('success', 'Configuration file loaded!');
 }
+
+// Auto-convert on paste
+document.addEventListener('DOMContentLoaded', function() {
+  const vlessInput = document.getElementById('vlessInput');
+  if (vlessInput) {
+    vlessInput.addEventListener('paste', function() {
+      setTimeout(() => {
+        if (this.value.startsWith('vless://')) {
+          convert();
+        }
+      }, 100);
+    });
+  }
+});
