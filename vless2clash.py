@@ -99,13 +99,13 @@ def vless_to_clash(vless_url: str) -> str:
     # Proxy-group и rules
     groups_rules = f"""
 proxy-groups:
-  - name: → Remnawave
+  - name: → VLESS
     type: select
     proxies:
       - {name}
 
 rules:
-  - MATCH,→ Remnawave
+  - MATCH,→ VLESS
 """
 
     return BASE_CONFIG + "\n" + proxy_block + groups_rules
