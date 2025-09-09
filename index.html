@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>VLESS → Clash.Meta Converter</title>
+  <style>
+    body { font-family: sans-serif; margin: 2rem; background: #f6f6f6; }
+    h1 { font-size: 20px; }
+    textarea, pre {
+      width: 100%; padding: 10px; font-family: monospace;
+      border-radius: 8px; border: 1px solid #ccc; margin-top: 10px;
+      background: #fff;
+    }
+    button {
+      margin-top: 10px; margin-right: 5px;
+      padding: 10px 15px;
+      border: none; border-radius: 6px;
+      background: #4caf50; color: white; font-size: 14px;
+      cursor: pointer;
+    }
+    button:hover { background: #45a049; }
+    #downloadBtn { background: #2196f3; }
+    #downloadBtn:hover { background: #1976d2; }
+  </style>
+</head>
+<body>
+  <h1>VLESS → Clash.Meta Converter</h1>
+  <p>Вставьте вашу <code>vless://</code> ссылку ниже:</p>
+
+  <textarea id="vlessInput" rows="4" placeholder="vless://..."></textarea>
+  <br>
+  <button onclick="convert()">Конвертировать</button>
+  <button id="downloadBtn" onclick="downloadConfig()" disabled>📥 Скачать .yaml</button>
+
+  <h2>Clash.Meta Config:</h2>
+  <pre id="output"></pre>
+
+  <script src="script.js"></script>
+</body>
+</html>
