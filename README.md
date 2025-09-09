@@ -5,7 +5,7 @@
 ## Использование:
 1. Запустить скрипт:
 ```bash
-bash <(curl -Ls https://raw.githubusercontent.com/ReeA11/vless2clash/refs/heads/master/install.sh)
+bash <(curl -Ls https://raw.githubusercontent.com/ReeA11/vless2clash/master/install.sh)
 ```
 2. Вставить `VLESS` ссылку
 3. Скопировать полученный конфиг в файл с раширением `.yaml`
